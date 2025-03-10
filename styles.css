@@ -1,0 +1,154 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f3f3f3;
+    color: #333;
+}
+
+/* Sección de inicio */
+.contenedor-inicio {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Estilos del carrusel */
+#carouselExampleIndicators {
+    width: 100%;
+    height: 100vh;
+}
+
+.carousel-inner,
+.carousel-item img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* Información superpuesta */
+.info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mejor legibilidad */
+}
+
+/* Logo */
+#logo img {
+    width: 200px;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Información del inicio */
+#info_inicio {
+    max-width: 600px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#info_inicio h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+#info_inicio p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Botón */
+#info_inicio button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#btn_icono {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+/*Anuncios*/
+#Anuncios{
+    background: #0125F0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+}
+#Anuncios img{
+    width: 20%;
+}
+.Anuncios-container{
+    display: flex;
+    justify-content: space-around;
+}
+/*Horario*/
+#horario-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+#Horario img{
+    width: 50%;
+}
+table {
+    width: 50%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    border: 3px solid black;
+}
+
+table th, table td {
+    border: 3px solid black;
+    padding: 12px;
+    text-align: center;
+}
+
+td:first-child {
+    font-weight: bold;
+    text-align: left;
+}
+#table{
+    display: flex;
+    justify-content: center;
+}
+
+/*Servicios*/
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #0125F0;
+    color: white;
+}
