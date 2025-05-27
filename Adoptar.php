@@ -1,174 +1,93 @@
 <?php
 session_start();
 $usuario = $_SESSION['usuario'] ?? null;
-?>
-<!DOCTYPE html>
-<html lang="en">
+$baseUrl = "./";
+require_once __DIR__ . "/DAO/Conexion.php";
+require "funciones.php";
 
+// Configurar paginación
+$limite = 8;
+$pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+$offset = ($pagina - 1) * $limite;
+
+// Conectar a la base de datos
+$conn = Conexion::conectar();
+
+// Contar total de registros
+$totalSql = "SELECT COUNT(*) FROM enadopcion WHERE estatus = 'activo'";
+$totalRegistros = $conn->query($totalSql)->fetchColumn();
+$totalPaginas = ceil($totalRegistros / $limite);
+
+// Obtener registros paginados
+$sql = "SELECT * FROM enadopcion WHERE estatus = 'activo' ORDER BY id_dar DESC LIMIT :limite OFFSET :offset";
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$animales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Animales en Adopción</title>
     <link rel="stylesheet" href="styles/adop-style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <!--Barra de navegacion-->
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <img src="img/logo.jpg" alt="">
-            <h3>Refugio Animal Alfa A.C.</h3>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-<<<<<<< HEAD:Adoptar.html
-                        <a class="nav-link" href="Adoptar.html">Adoptar</a>
-=======
-                        <a class="nav-link" href="Adoptar.php">Adoptados</a>
->>>>>>> 8ccaa0e (Actualización del proyecto):Adoptar.php
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="adoptados.php">Adoptados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Productos.php">Productos</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Agregar
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="formularios/f-adopcion.html">En adopción</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-adoptados.html">Adoptados</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-productos.html">Productos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-avisos.html">Avisos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-servicios.html">Servicios</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="ms-auto d-flex align-items-center gap-2">
-                    <?php if (isset($_SESSION['usuario'])): ?>
-                        <span class="text-white"><?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
-                        <form action="logout.php" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-                        </form>
-                    <?php else: ?>
-                        <a href="login.php" class="btn btn-light">Login</a>
-                        <a href="registro.php" class="btn btn-outline-light">Registrarse</a>
-                    <?php endif; ?>
+    <?php
+    require_once "componentes/header.php";
+    imprimir();
+    ?>
+
+    <div class="container mt-4">
+        <div class="row">
+            <?php foreach ($animales as $animal): ?>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="data:image/jpeg;base64,<?= base64_encode($animal['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($animal['nombre']) ?>">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title"><?= htmlspecialchars($animal['nombre']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($animal['descripcion']) ?></p>
+                            <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#animalModal">Adoptar</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    </nav>
 
-    <!--Cartas-->
-    <div id="card-Container">
-        <div class="card" style="width: 18rem;">
-            <img src="img/perrito2.jpg" class="card-img-top" alt="Luna">
-            <div class="card-body">
-                <h5 class="card-title">Luna</h5>
-                <p class="card-text">Una cachorra juguetona y llena de energía, lista para una familia amorosa.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/perrito3.jpg" class="card-img-top" alt="Max">
-            <div class="card-body">
-                <h5 class="card-title">Max</h5>
-                <p class="card-text">Un perro leal y protector que busca un hogar donde pueda dar amor y compañía.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/perrito4.jpg" class="card-img-top" alt="Rocky">
-            <div class="card-body">
-                <h5 class="card-title">Rocky</h5>
-                <p class="card-text">Aventurero y curioso, siempre está listo para jugar y explorar.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/perrito5.jpg" class="card-img-top" alt="Bella">
-            <div class="card-body">
-                <h5 class="card-title">Bella</h5>
-                <p class="card-text">Dulce y cariñosa, siempre lista para dar y recibir amor.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-    </div>
-    <div id="card-Container">
-        <div class="card" style="width: 18rem;">
-            <img src="img/gatito1.jpg" class="card-img-top" alt="Milo">
-            <div class="card-body">
-                <h5 class="card-title">Milo</h5>
-                <p class="card-text">Un gatito curioso que ama explorar y descubrir nuevos lugares.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/gatito2.jpg" class="card-img-top" alt="Nala">
-            <div class="card-body">
-                <h5 class="card-title">Nala</h5>
-                <p class="card-text">Tranquila y amorosa, disfruta de largas siestas y caricias suaves.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/gatito3.jpg" class="card-img-top" alt="Simba">
-            <div class="card-body">
-                <h5 class="card-title">Simba</h5>
-                <p class="card-text">Valiente y juguetón, siempre está buscando nuevas aventuras.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
-        <div class="card" style="width: 18rem;">
-            <img src="img/gatito4.jpg" class="card-img-top" alt="Luna">
-            <div class="card-body">
-                <h5 class="card-title">Luna</h5>
-                <p class="card-text">Misteriosa y encantadora, con una mirada que enamora.</p>
-                <a href="#" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#animalModal">
-                    Adoptar
-                </a>
-            </div>
-        </div>
+        <!-- PAGINACIÓN -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <?= $pagina <= 1 ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>" aria-label="Anterior">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+
+                <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                    <li class="page-item <?= $pagina == $i ? 'active' : '' ?>">
+                        <a class="page-link" href="?pagina=<?= $i ?>"><?= $i ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <li class="page-item <?= $pagina >= $totalPaginas ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?pagina=<?= $pagina + 1 ?>" aria-label="Siguiente">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal de adopción -->
     <div class="modal fade" id="animalModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle">Formulario de Adopción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
@@ -207,9 +126,6 @@ $usuario = $_SESSION['usuario'] ?? null;
                         <input class="form-control" type="file" id="formFile">
                         <p>Subir tu comprobante de domicilio escaneado en formato PDF</p>
                     </div>
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -218,32 +134,9 @@ $usuario = $_SESSION['usuario'] ?? null;
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example" id="navegacion">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</body>
-<footer>
-    <p><strong>Derechos reservados para la práctica</strong></p>
-    <div class="contact-info">
-        <span><i class="fa-solid fa-phone"></i> 445 121 8181</span>
-        <span><i class="fa-solid fa-envelope"></i> refugioanimalalfaa.c@hotmail.com</span>
-        <span><i class="fa-brands fa-instagram"></i> refugio_animal_alfa_ac</span>
-        <span><i class="fa-brands fa-tiktok"></i> refugio_animal_alfa</span>
-    </div>
-</footer>
 
+    <?php require_once "componentes/footer.php"; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

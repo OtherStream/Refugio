@@ -1,3 +1,8 @@
+<?php
+session_start();
+$baseUrl = "./"; 
+require "funciones.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,55 +21,15 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <!--Barra de navegacion-->
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <img src="img/logo.jpg" alt="">
-            <h3>Refugio Animal Alfa A.C.</h3>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Adoptar.php">Adoptados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="adoptados.php">Adoptados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Productos.php">Productos</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Agregar
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="formularios/f-adopcion.html">En adopción</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-adoptados.html">Adoptados</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-productos.html">Productos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-avisos.html">Avisos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-servicios.html">Servicios</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div>
-                </div>
-                <div class="ms-auto d-flex align-items-center gap-2">
-                    <a href="registro.php" class="btn btn-outline-light">Registrarse</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <?php 
+    require_once "componentes/header.php";
+    imprimir();
+    ?>
 
     <div class="container mt-5">
         <div class="login-box">
             <h2 class="text-center mb-4">Iniciar sesión</h2>
-            <form id="formLogin" method="POST" action="validar_login.php">
+            <form id="formLogin" method="POST" action="ValidarLogin.php">
                 <div class="mb-3">
                     <label for="usuario" class="form-label">Usuario:</label>
                     <input type="text" name="usuario" id="usuario" class="form-control"
@@ -83,15 +48,9 @@
             </form>
         </div>
     </div>
-    <footer>
-        <p><strong>Derechos reservados para la práctica</strong></p>
-        <div class="contact-info">
-            <span><i class="fa-solid fa-phone"></i> 445 121 8181</span>
-            <span><i class="fa-solid fa-envelope"></i> refugioanimalalfaa.c@hotmail.com</span>
-            <span><i class="fa-brands fa-instagram"></i> refugio_animal_alfa_ac</span>
-            <span><i class="fa-brands fa-tiktok"></i> refugio_animal_alfa</span>
-        </div>
-    </footer>
+    <?php 
+    require_once "funciones.php";
+    require_once "componentes/footer.php";?>
     <?php if (isset($_GET['error']) && $_GET['error'] == 1): ?>
         <script>
             const modal = new bootstrap.Modal(document.getElementById("modalError"));

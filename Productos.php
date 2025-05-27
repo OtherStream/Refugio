@@ -1,6 +1,9 @@
 <?php
 session_start();
 $usuario = $_SESSION['usuario'] ?? null;
+$baseUrl = "./";
+require_once __DIR__ . "/DAO/Conexion.php";
+require "funciones.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,60 +25,10 @@ $usuario = $_SESSION['usuario'] ?? null;
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <img src="img/logo.jpg" alt="">
-            <h3>Refugio Animal Alfa A.C.</h3>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-<<<<<<< HEAD:Productos.html
-                        <a class="nav-link" href="Adoptar.html">Adoptar</a>
-=======
-                        <a class="nav-link" href="Adoptar.php">Adoptados</a>
->>>>>>> 8ccaa0e (Actualización del proyecto):Productos.php
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="adoptados.php">Adoptados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Productos.php">Productos</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Agregar
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="formularios/f-adopcion.html">En adopción</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-adoptados.html">Adoptados</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-productos.html">Productos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-avisos.html">Avisos</a></li>
-                            <li><a class="dropdown-item" href="formularios/f-servicios.html">Servicios</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="ms-auto d-flex align-items-center gap-2">
-                    <?php if (isset($_SESSION['usuario'])): ?>
-                        <span class="text-white"><?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
-                        <form action="logout.php" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-                        </form>
-                    <?php else: ?>
-                        <a href="login.php" class="btn btn-light">Login</a>
-                        <a href="registro.php" class="btn btn-outline-light">Registrarse</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <?php 
+    require_once "componentes/header.php";
+    imprimir();
+    ?>
 
     <div class="container mt-4">
         <div class="row">
@@ -268,14 +221,8 @@ $usuario = $_SESSION['usuario'] ?? null;
 
 
 </body>
-<footer>
-    <p><strong>Derechos reservados para la práctica</strong></p>
-    <div class="contact-info">
-        <span><i class="fa-solid fa-phone"></i> 445 121 8181</span>
-        <span><i class="fa-solid fa-envelope"></i> refugioanimalalfaa.c@hotmail.com</span>
-        <span><i class="fa-brands fa-instagram"></i> refugio_animal_alfa_ac</span>
-        <span><i class="fa-brands fa-tiktok"></i> refugio_animal_alfa</span>
-    </div>
-</footer>
+<?php 
+    require_once "funciones.php";
+    require_once "componentes/footer.php";?>
 
 </html>
