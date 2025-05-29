@@ -3,7 +3,7 @@ require_once __DIR__ . '/DAO/DAOUsuarios.php';
 
 header('Content-Type: application/json');
 
-$response = ['success' => false, 'mensaje' => ''];
+$response = ['exitoso' => false, 'mensaje' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? null;
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $eliminacionExitosa = $dao->eliminarUsuario($id);
 
     if ($eliminacionExitosa) {
-        $response['success'] = true;
+        $response['exitoso'] = true;
         $response['mensaje'] = 'Usuario eliminado con éxito.';
     } else {
         $response['mensaje'] = 'Error al eliminar el usuario.';

@@ -65,13 +65,13 @@ $usuarios = $dao->obtenerTodos();
         </table>
     </div>
 
-    <!-- JavaScript para manejar las acciones -->
+
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.delete-btn');
         const editButtons = document.querySelectorAll('.edit-btn');
 
-        // Manejo de eliminación
+
         deleteButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const currentId = this.getAttribute('data-id');

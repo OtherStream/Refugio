@@ -8,6 +8,7 @@ require "funciones.php";
 
 $dao = new DAOAnimalAdopcion();
 $animales = $dao->obtenerTodos();
+
 ?>
 
 <!DOCTYPE html>

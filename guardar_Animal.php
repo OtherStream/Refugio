@@ -1,12 +1,12 @@
 <?php
+session_start();
 require_once "DAO/DAOEnAdopcion.php";
 require_once "modelos/adopcion.php";
 
-// Initialize DAO
 $dao = new DAOAnimalAdopcion();
 $animal = new AnimalAdopcion();
+$errores = [];
 
-// Populate the animal object with form data
 $animal->nombre = $_POST['nombre'] ?? '';
 $animal->descripcion = $_POST['descripcion'] ?? '';
 $animal->tipo = $_POST['tipo'] ?? '';
@@ -14,15 +14,44 @@ $animal->tamano = $_POST['tamano'] ?? '';
 $animal->color = $_POST['color'] ?? '';
 $animal->genero = $_POST['genero'] ?? '';
 
-// Handle file upload for the image
-$uploadDir = "img/"; // Adjust this path based on your project structure
+$isEdit = isset($_POST['id']) && !empty($_POST['id']);
+
+// Validaciones
+if (strlen(trim($animal->nombre)) < 3) {
+    $errores[] = "El nombre debe tener al menos 3 caracteres.";
+}
+
+if (strlen(trim($animal->descripcion)) < 10) {
+    $errores[] = "La descripción debe tener al menos 10 caracteres.";
+}
+
+if (!$isEdit && (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK)) {
+    $errores[] = "Debes seleccionar una imagen.";
+}
+
+if (!in_array($animal->tipo, ['perro', 'gato'])) {
+    $errores[] = "Debes seleccionar un tipo válido.";
+}
+
+if (!in_array($animal->tamano, ['pequeño', 'mediano', 'grande'])) {
+    $errores[] = "Debes seleccionar un tamaño válido.";
+}
+
+if (strlen(trim($animal->color)) < 3) {
+    $errores[] = "El color debe tener al menos 3 caracteres.";
+}
+
+if (!in_array($animal->genero, ['macho', 'hembra'])) {
+    $errores[] = "Debes seleccionar un género válido.";
+}
+
+$uploadDir = "img/";
 $animal->imagen = '';
-if (isset($_POST['id']) && !empty($_POST['id'])) {
-    // If editing, fetch the existing animal to get the current image
+if ($isEdit) {
     $animal->id = $_POST['id'];
     $existingAnimal = $dao->obtenerUno($animal->id);
     if ($existingAnimal) {
-        $animal->imagen = $existingAnimal->imagen; // Default to existing image
+        $animal->imagen = $existingAnimal->imagen;
     }
 }
 
@@ -32,32 +61,30 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
     if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadPath)) {
         $animal->imagen = $uploadPath;
     } else {
-        // Handle upload error
-        error_log("Failed to upload image: " . $_FILES['imagen']['error']);
+        $errores[] = "Error al cargar la imagen.";
     }
 }
 
-// Debug: Log the operation being performed
-error_log("guardar_Animal.php: ID = " . ($_POST['id'] ?? 'Not set'));
-
-// Perform the operation (edit or add)
-$success = false;
-if (isset($_POST['id']) && !empty($_POST['id'])) {
-    // Edit existing animal
-    $animal->id = $_POST['id'];
-    $success = $dao->editar($animal);
-    error_log("guardar_Animal.php: Editing animal with ID = " . $animal->id . ", Success = " . ($success ? 'true' : 'false'));
-} else {
-    // Add new animal
-    $success = $dao->agregar($animal);
-    error_log("guardar_Animal.php: Adding new animal, Success = " . ($success ? 'true' : 'false'));
+if (!empty($errores)) {
+    $_SESSION['errores'] = $errores;
+    $_SESSION['form_data'] = $_POST;
+    header("Location: formulario_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
+    exit();
 }
 
-// Redirect back to the list page
+$success = false;
+if ($isEdit) {
+    $success = $dao->editar($animal);
+} else {
+    $success = $dao->agregar($animal);
+}
+
 if ($success) {
     header("Location: lista_EnAdopcion.php");
 } else {
-    header("Location: lista_EnAdopcion.php?error=save_failed");
+    $_SESSION['errores'] = ["Error al guardar el animal en la base de datos."];
+    $_SESSION['form_data'] = $_POST;
+    header("Location: formulario_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
 }
 exit();
 ?>
