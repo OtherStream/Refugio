@@ -3,7 +3,7 @@ session_start();
 $usuario = $_SESSION['usuario'] ?? null;
 $baseUrl = "./";
 require_once __DIR__ . "/DAO/Conexion.php";
-require_once "funciones.php";
+require_once __DIR__ . "/DAO/DAOEnAdopcion.php";
 
 // Configurar paginación
 $limite = 8;
@@ -11,22 +11,16 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? intval($_GET['
 $offset = ($pagina - 1) * $limite;
 
 try {
-    // Conectar a la base de datos
-    $conn = Conexion::conectar();
+    $dao = new DAOAnimalAdopcion();
 
-    // Contar total de registros
-    $totalSql = "SELECT COUNT(*) FROM enadopcion WHERE estatus = 'activo'";
-    $totalStmt = $conn->query($totalSql);
-    $totalRegistros = $totalStmt->fetchColumn();
-    $totalPaginas = ceil($totalRegistros / $limite);
+    // Obtener y contar total de animales activos
+    $totalAnimales = $dao->obtenerTotalActivos();
+    // obtener incativos
+    $totalAnimales += $dao->obtenerTotalInactivos();
+    $totalPaginas = ceil($totalAnimales / $limite);
 
-    // Obtener registros paginados
-    $sql = "SELECT * FROM enadopcion WHERE estatus = 'activo' ORDER BY id_dar DESC LIMIT :limite OFFSET :offset";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
-    $animales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $animales = $dao->obtenerActivosPorRango($limite, $offset);
 } catch (PDOException $e) {
     error_log("Error en Adoptar.php: " . $e->getMessage());
     echo "Error al conectar con la base de datos: " . htmlspecialchars($e->getMessage());
@@ -36,15 +30,16 @@ try {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Animales en Adopción</title>
     <link rel="stylesheet" href="styles/adop-style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <?php require_once "componentes/header.php"; ?>
-    <!-- card -->
     <div class="container mt-4">
         <div class="row">
             <?php if (empty($animales)): ?>
@@ -55,26 +50,29 @@ try {
                 <?php foreach ($animales as $animal): ?>
                     <div class="col-md-3 mb-4">
                         <div class="card h-100" style="overflow: hidden;">
-                            <img src="<?= htmlspecialchars($animal['imagen'] ?? '', ENT_QUOTES, 'UTF-8') ?>" 
-                                 class="card-img-top"
-                                 alt="<?= htmlspecialchars($animal['nombre'] ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?>">
+                            <img src="<?= htmlspecialchars($animal->imagen ?? '', ENT_QUOTES, 'UTF-8') ?>" class="card-img-top"
+                                alt="<?= htmlspecialchars($animal->nombre ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?>">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title"><?= htmlspecialchars($animal['nombre'] ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($animal['descripcion'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
-                                <a href="#" class="btn btn-primary mt-auto adoptar-btn"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#animalModal"
-                                   data-id="<?= htmlspecialchars($animal['id_dar'], ENT_QUOTES, 'UTF-8') ?>"
-                                   data-tipo="<?= htmlspecialchars($animal['tipo_animal'] ?? 'desconocido', ENT_QUOTES, 'UTF-8') ?>"
-                                   data-nombre="<?= htmlspecialchars($animal['nombre'] ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?>">Adoptar</a>
+                                <h5 class="card-title">
+                                    <?= htmlspecialchars($animal->nombre ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($animal->descripcion ?? '', ENT_QUOTES, 'UTF-8') ?>
+                                </p>
+                                <?php if($animal->estatus === 'inactivo'): ?>
+                                    <p class="card-text">Ya hay personas interesadas</p>
+                                <?php endif; ?>
+                                <a href="#" class="btn btn-primary mt-auto adoptar-btn" data-bs-toggle="modal"
+                                    data-bs-target="#animalModal"
+                                    data-id="<?= htmlspecialchars($animal->id_dar, ENT_QUOTES, 'UTF-8') ?>"
+                                    data-tipo="<?= htmlspecialchars($animal->tipo ?? 'desconocido', ENT_QUOTES, 'UTF-8') ?>"
+                                    data-nombre="<?= htmlspecialchars($animal->nombre ?? 'Sin nombre', ENT_QUOTES, 'UTF-8') ?>">Adoptar</a>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
+
             <?php endif; ?>
         </div>
 
-        <!-- Paginación -->
         <?php if ($totalPaginas > 1): ?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
@@ -98,7 +96,6 @@ try {
         <?php endif; ?>
     </div>
 
-    <!-- Modal de adopción -->
     <div class="modal fade" id="animalModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -125,9 +122,9 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="scripts/solicitud.js"></script>
 </body>
+
 </html>
 
 <?php
-// Desconectar de la base de datos
 Conexion::desconectar();
 ?>

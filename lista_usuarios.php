@@ -4,7 +4,7 @@ $usuario = $_SESSION['usuario'] ?? null;
 $baseUrl = "./";
 
 require_once __DIR__ . '/DAO/DAOUsuarios.php';
-require "funciones.php";
+
 
 $dao = new DAOUsuarios();
 $usuarios = $dao->obtenerTodos();
@@ -82,8 +82,10 @@ $usuarios = $dao->obtenerTodos();
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
+                    console.log(data.response);
+                    if (data.){
                         document.querySelector(`tr:has(button[data-id="${currentId}"])`).remove();
+                        window.location.reload();
                     }
                 })
                 .catch(error => {

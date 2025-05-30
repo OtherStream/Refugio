@@ -3,19 +3,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const nombreInput = document.getElementById("nombre");
     const apellidosInput = document.getElementById("apellidos");
-    const rolInput = document.getElementById("rol");
+    const tipoUsuarioInput = document.getElementById("tipoUsuario");
     const telefonoInput = document.getElementById("telefono");
     const direccionInput = document.getElementById("direccion");
     const edadInput = document.getElementById("edad");
     const sexoInput = document.getElementById("sexo");
+    const usuarioInput = document.getElementById("usuario");
+    const passInput = document.getElementById("pass");
 
     const errorNombre = document.getElementById("errorNombre");
     const errorApellidos = document.getElementById("errorApellidos");
-    const errorRol = document.getElementById("errorRol");
+    const errorTipoUsuario = document.getElementById("errorTipoUsuario");
     const errorTelefono = document.getElementById("errorTelefono");
     const errorDireccion = document.getElementById("errorDireccion");
     const errorEdad = document.getElementById("errorEdad");
     const errorSexo = document.getElementById("errorSexo");
+    const errorUsuario = document.getElementById("errorUsuario");
+    const errorPass = document.getElementById("errorPass");
 
     // Validación en tiempo real
     nombreInput.addEventListener("input", function () {
@@ -72,15 +76,47 @@ document.addEventListener("DOMContentLoaded", function () {
             edadInput.classList.remove("is-invalid");
         }
     });
-    rolInput.addEventListener("change", function () {
-        if (rolInput.value === "") {
-            errorRol.innerText = "Debes seleccionar un tipo de usuario.";
-            rolInput.classList.add("is-invalid");
+    sexoInput.addEventListener("change", function () {
+        if (sexoInput.value === "") {
+            errorSexo.innerText = "Selecciona un sexo.";
+            sexoInput.classList.add("is-invalid");
         } else {
-            errorRol.innerText = "";
-            rolInput.classList.remove("is-invalid");
+            errorSexo.innerText = "";
+            sexoInput.classList.remove("is-invalid");
         }
     });
+    usuarioInput.addEventListener("input", function () {
+        let val = usuarioInput.value.trim();
+        if (val.length < 4 || !/^[a-zA-Z0-9_]+$/.test(val)) {
+            errorUsuario.innerText = "El usuario debe tener al menos 4 caracteres y solo contener letras, números o guiones bajos.";
+            usuarioInput.classList.add("is-invalid");
+        } else {
+            errorUsuario.innerText = "";
+            usuarioInput.classList.remove("is-invalid");
+        } 
+    });
+
+    passInput.addEventListener("input", function () {
+        let val = passInput.value.trim();
+        if (val.length < 4) {
+            errorPass.innerText = "La contraseña debe tener al menos 4 caracteres.";
+            passInput.classList.add("is-invalid");
+        } else {
+            errorPass.innerText = "";
+            passInput.classList.remove("is-invalid");
+        }
+    });
+    if (tipoUsuarioInput) { 
+        tipoUsuarioInput.addEventListener("change", function () {
+            if (tipoUsuarioInput.value === "") {
+                errorTipoUsuario.innerText = "Debes seleccionar un tipo de usuario.";
+                tipoUsuarioInput.classList.add("is-invalid");
+            } else {
+                errorTipoUsuario.innerText = "";
+                tipoUsuarioInput.classList.remove("is-invalid");
+            }
+        });
+    }
 
 
     // Validación
@@ -137,14 +173,25 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         }
 
-        // tipo usuario
-        if (rolInput.value === "") {
-            errorRol.innerText = "Debes seleccionar un tipo de usuario.";
-            rolInput.classList.add("is-invalid");
+        // Usuario
+        if (usuarioInput.value.trim().length < 4 || !/^[a-zA-Z0-9_]+$/.test(usuarioInput.value.trim())) {
+            errorUsuario.innerText = "El usuario debe tener al menos 4 caracteres y solo contener letras, números o guiones bajos.";
+            usuarioInput.classList.add("is-invalid");
             isValid = false;
-        } else {
-            errorRol.innerText = "";
-            rolInput.classList.remove("is-invalid");
+        }
+
+        // Contraseña
+        if (passInput.value.trim().length < 4) {
+            errorPass.innerText = "La contraseña debe tener al menos 4 caracteres.";
+            passInput.classList.add("is-invalid");
+            isValid = false;
+        }
+
+        // Tipo de usuario 
+        if (tipoUsuarioInput && tipoUsuarioInput.value === "") {
+            errorTipoUsuario.innerText = "Debes seleccionar un tipo de usuario.";
+            tipoUsuarioInput.classList.add("is-invalid");
+            isValid = false;
         }
 
 

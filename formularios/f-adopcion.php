@@ -2,7 +2,6 @@
     session_start();
     $usuario = $_SESSION['usuario'] ?? null;
     $baseUrl = "../"; 
-    require "../funciones.php";
     require_once "../DAO/DAOEnAdopcion.php";
 
     $animal = null;
@@ -41,7 +40,7 @@
         </div>
 
         <?php if ($animal): ?>
-            <input type="hidden" name="id" value="<?= htmlspecialchars($animal->id) ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($animal->id_dar) ?>">
         <?php endif; ?>
 
         <div class="mb-3">

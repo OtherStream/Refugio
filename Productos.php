@@ -3,7 +3,7 @@ session_start();
 $usuario = $_SESSION['usuario'] ?? null;
 $baseUrl = "./";
 require_once __DIR__ . "/DAO/Conexion.php";
-require "funciones.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

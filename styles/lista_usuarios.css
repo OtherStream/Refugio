@@ -1,0 +1,131 @@
+ ul {
+     list-style-type: none;
+     padding: 0;
+ }
+
+ li {
+     margin-bottom: 15px;
+     border: 1px solid #ccc;
+     padding: 10px;
+     border-radius: 5px;
+ }
+
+ img {
+     margin-right: 10px;
+     vertical-align: middle;
+ }
+
+ button {
+     margin-right: 5px;
+     padding: 5px 10px;
+     cursor: pointer;
+ }
+
+ .edit-btn {
+     background-color: #4CAF50;
+     color: white;
+     border: none;
+ }
+
+ .delete-btn {
+     background-color: #f44336;
+     color: white;
+     border: none;
+ }
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    color: #333;
+}
+
+h1,
+h2 {
+    text-align: center;
+}
+
+/*Barra de navegacion*/
+.navbar-custom {
+    background-color: #004aad;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white;
+    font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+    color: #ffdd00;
+}
+
+.navbar a.active {
+    color: yellow;
+    font-weight: bold;
+    pointer-events: none;
+    cursor: default;
+}
+
+.container-fluid {
+    gap: 10px;
+
+}
+
+.container-fluid h3 {
+    color: white;
+    font-weight: bold
+}
+
+.container-fluid img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+
+
+
+
+footer {
+    background-color: #004aad;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    margin-top: 50px; 
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+
+.contact-info span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.contact-info i {
+    font-size: 16px;
+}
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}

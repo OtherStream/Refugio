@@ -4,7 +4,6 @@ $usuario = $_SESSION['usuario'] ?? null;
 $baseUrl = "./";
 
 require_once __DIR__ . '/DAO/DAOEnAdopcion.php';
-require "funciones.php";
 
 $dao = new DAOAnimalAdopcion();
 $animales = $dao->obtenerTodos();
@@ -42,16 +41,16 @@ $animales = $dao->obtenerTodos();
                     <?php foreach ($animales as $a): ?>
                         <tr>
                             <td><?= htmlspecialchars($a->nombre) ?></td>
-                            <td><?= htmlspecialchars($a->tipo) ?></td>
+                            <td><?= htmlspecialchars($a->tipo_animal) ?></td>
                             <td><?= htmlspecialchars($a->tamano) ?></td>
                             <td><img src="<?= htmlspecialchars($a->imagen) ?>" width="100" alt="<?= htmlspecialchars($a->nombre) ?>"></td>
                             <td>
                                 <button type="button" class="edit-btn btn btn-primary" 
-                                        data-id="<?= htmlspecialchars($a->id) ?>">
+                                        data-id="<?= htmlspecialchars($a->id_dar) ?>">
                                     Editar
                                 </button>
                                 <button type="button" class="delete-btn btn btn-danger" 
-                                        data-id="<?= htmlspecialchars($a->id) ?>">
+                                        data-id="<?= htmlspecialchars($a->id_dar) ?>">
                                     Eliminar
                                 </button>
                             </td>
@@ -66,7 +65,6 @@ $animales = $dao->obtenerTodos();
         </table>
     </div>
 
-    <!-- JavaScript para manejar las acciones -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -76,6 +74,7 @@ $animales = $dao->obtenerTodos();
         deleteButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const currentId = this.getAttribute('data-id');
+                
                 fetch('eliminar.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

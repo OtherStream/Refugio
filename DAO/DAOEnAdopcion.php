@@ -30,7 +30,7 @@ class DAOAnimalAdopcion
                 ':nombre' => $obj->nombre,
                 ':descripcion' => $obj->descripcion,
                 ':imagen' => $obj->imagen,
-                ':tipo_animal' => $obj->tipo,
+                ':tipo_animal' => $obj->tipo_animal,
                 ':tamano' => $obj->tamano,
                 ':color' => $obj->color,
                 ':genero' => $obj->genero,
@@ -58,11 +58,11 @@ class DAOAnimalAdopcion
 
             foreach ($resultado as $fila) {
                 $obj = new AnimalAdopcion();
-                $obj->id = $fila->id_dar;
+                $obj->id_dar = $fila->id_dar;
                 $obj->nombre = $fila->nombre;
                 $obj->descripcion = $fila->descripcion;
                 $obj->imagen = $fila->imagen;
-                $obj->tipo = $fila->tipo_animal;
+                $obj->tipo_animal = $fila->tipo_animal;
                 $obj->tamano = $fila->tamano;
                 $obj->color = $fila->color;
                 $obj->genero = $fila->genero;
@@ -77,6 +77,71 @@ class DAOAnimalAdopcion
         }
     }
 
+    public function obtenerTotalActivos()
+    {
+        try {
+            $this->conectar();
+            $sentenciaSQL = $this->conexion->prepare("SELECT COUNT(*) FROM enadopcion WHERE estatus = 'activo'");
+            $sentenciaSQL->execute();
+            $resultado = $sentenciaSQL->fetch(PDO::FETCH_ASSOC);
+            return $resultado['count'] ?? 0;
+        } catch (PDOException $e) {
+            return null;
+        } finally {
+            Conexion::desconectar();
+        }
+    }
+
+    public function obtenerTotalInactivos()
+    {
+        try {
+            $this->conectar();
+            $sentenciaSQL = $this->conexion->prepare("SELECT COUNT(*) FROM enadopcion WHERE estatus = 'inactivo'");
+            $sentenciaSQL->execute();
+            $resultado = $sentenciaSQL->fetch(PDO::FETCH_ASSOC);
+            return $resultado['count'] ?? 0;
+        } catch (PDOException $e) {
+            return null;
+        } finally {
+            Conexion::desconectar();
+        }
+    }
+
+        public function obtenerActivosPorRango($limite, $offset)
+        {
+            try {
+                
+                $this->conectar();
+                $lista = [];
+                $sentenciaSQL = $this->conexion->prepare("SELECT * FROM enadopcion WHERE estatus = 'activo' or estatus = 'inactivo' ORDER BY id_dar DESC LIMIT :limite OFFSET :offset");
+                $sentenciaSQL->bindParam(':limite', $limite, PDO::PARAM_INT);
+                $sentenciaSQL->bindParam(':offset', $offset, PDO::PARAM_INT);
+                $sentenciaSQL->execute();
+                $resultado = $sentenciaSQL->fetchAll(PDO::FETCH_OBJ);
+                
+                foreach ($resultado as $fila) {
+                    $obj = new AnimalAdopcion();
+                    $obj->id_dar = $fila->id_dar;
+                    $obj->nombre = $fila->nombre;
+                    $obj->descripcion = $fila->descripcion;
+                    $obj->imagen = $fila->imagen;
+                    $obj->tipo = $fila->tipo_animal;
+                    $obj->tamano = $fila->tamano;
+                    $obj->color = $fila->color;
+                    $obj->genero = $fila->genero;
+                    $obj->estatus = $fila->estatus;
+                    $lista[] = $obj;
+                }
+                
+                return $lista;
+            } catch (PDOException $e) {
+                return null;
+            } finally {
+                Conexion::desconectar();
+            }
+        }
+
+
     public function obtenerUno($id)
     {
         try {
@@ -87,7 +152,7 @@ class DAOAnimalAdopcion
             $fila = $sentenciaSQL->fetch(PDO::FETCH_OBJ);
             if ($fila) {
                 $obj = new AnimalAdopcion();
-                $obj->id = $fila->id_dar;
+                $obj->id_dar = $fila->id_dar;
                 $obj->nombre = $fila->nombre;
                 $obj->descripcion = $fila->descripcion;
                 $obj->imagen = $fila->imagen;

@@ -3,7 +3,6 @@ session_start();
 require_once __DIR__ . '/DAO/DAOUsuarios.php';
 
 $baseUrl = "./";
-require "funciones.php";
 
 $dao = new DAOUsuarios();
 $usuarioData = null;

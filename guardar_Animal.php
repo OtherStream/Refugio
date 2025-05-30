@@ -49,7 +49,7 @@ $uploadDir = "img/";
 $animal->imagen = '';
 if ($isEdit) {
     $animal->id = $_POST['id'];
-    $existingAnimal = $dao->obtenerUno($animal->id);
+    $existingAnimal = $dao->obtenerUno($animal->id_dar);
     if ($existingAnimal) {
         $animal->imagen = $existingAnimal->imagen;
     }
@@ -68,7 +68,7 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
 if (!empty($errores)) {
     $_SESSION['errores'] = $errores;
     $_SESSION['form_data'] = $_POST;
-    header("Location: formulario_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
+    header("Location: formularios/f_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
     exit();
 }
 
@@ -84,7 +84,7 @@ if ($success) {
 } else {
     $_SESSION['errores'] = ["Error al guardar el animal en la base de datos."];
     $_SESSION['form_data'] = $_POST;
-    header("Location: formulario_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
+    header("Location: lista_EnAdopcion.php?error=save_failed" . ($isEdit ? "?id=" . $animal->id_dar: ""));
 }
 exit();
 ?>

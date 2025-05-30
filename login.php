@@ -1,7 +1,7 @@
 <?php
 session_start();
 $baseUrl = "./";
-require "funciones.php";
+
 
 $errors = $_SESSION['errors'] ?? [];
 $form_data = $_SESSION['form_data'] ?? [];
@@ -25,7 +25,6 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
         crossorigin="anonymous"></script>
     <?php 
     require_once "componentes/header.php";
-    imprimir();
     ?>
 
     <div class="modal fade" id="modalEmpty" tabindex="-1" aria-labelledby="modalEmptyLabel" aria-hidden="true">

@@ -8,6 +8,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <!-- OPCIONES SIN INICIO DE SESION -->
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $baseUrl ?>index.php">Inicio</a>
                 </li>
@@ -20,7 +21,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $baseUrl ?>Productos.php">Productos</a>
                 </li>
+
+                <!-- OPCIONES CON INICIO DE SESION: USUARIO-->
+                <?php if (isset($_SESSION['usuario']) && isset($_SESSION['rol']) && $_SESSION['rol'] === 'usuario'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $baseUrl ?>lista_solicitudes.php">Mis solicitudes</a>
+                    </li>
+                <?php endif; ?>
+                
+                <!-- OPCIONES CON INICIO DE SESION: ADMIN-->
                 <?php if (isset($_SESSION['usuario']) && isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $baseUrl ?>lista_solicitudes.php">Solicitudes</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">

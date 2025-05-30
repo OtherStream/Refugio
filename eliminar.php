@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-
+    
     if ($id !== false && $id > 0) {
         $dao = new DAOAnimalAdopcion();
         $resultado = $dao->eliminar($id);
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             echo json_encode(['success' => false, 'mensaje' => 'No se pudo eliminar el animal']);
         }
     } else {
-        echo json_encode(['success' => false, 'mensaje' => 'ID inválido']);
+        echo json_encode(['success' => false, 'mensaje' => 'ID invalido']);
     }
 } else {
     echo json_encode(['success' => false, 'mensaje' => 'Solicitud inválida']);

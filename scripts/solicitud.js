@@ -38,21 +38,23 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: `id_animal=${encodeURIComponent(idAnimal)}`
         })
-        .then(response => response.json())
-        .then(data => {
-            mensajeResultado.textContent = data.message;
-            mensajeResultado.className = 'mt-3 text-center ' + (data.success ? 'text-success' : 'text-danger');
-            mensajeResultado.style.display = 'block';
+            .then(response => response.json()) 
+            .then(data => {
+                mensajeResultado.textContent = data.message;
+                mensajeResultado.className = 'mt-3 text-center ' + (data.success ? 'text-success' : 'text-danger');
+                mensajeResultado.style.display = 'block';
 
-            if (data.success) {
-                modal.hide();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            mensajeResultado.textContent = 'Ocurrió un error al procesar la solicitud.';
-            mensajeResultado.className = 'mt-3 text-center text-danger';
-            mensajeResultado.style.display = 'block';
-        });
+                if (data.success) {
+                    modal.hide();
+                    window.location.reload();    
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mensajeResultado.textContent = 'Ocurrió un error al procesar la solicitud.';
+                mensajeResultado.className = 'mt-3 text-center text-danger';
+                mensajeResultado.style.display = 'block';
+            });
     });
 });
