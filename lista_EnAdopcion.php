@@ -82,9 +82,7 @@ $animales = $dao->obtenerTodos();
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        document.querySelector(`tr:has(button[data-id="${currentId}"])`).remove();
-                    }
+                    window.location.reload(); 
                 })
                 .catch(error => {
                     console.error('Error:', error);
