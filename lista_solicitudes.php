@@ -76,9 +76,9 @@ endif;
                                     <td class="status-cell">
                                         <?php if ($s->aceptado == 'P'): ?>
                                             <?= htmlspecialchars("Pendiente") ?>
-                                        <?php elseif ($s->aceptado == 'a'): ?>
+                                        <?php elseif ($s->aceptado == 'A'): ?>
                                             <?= htmlspecialchars("Aceptado") ?>
-                                        <?php elseif ($s->aceptado == 'r'): ?>
+                                        <?php elseif ($s->aceptado == 'R'): ?>
                                             <?= htmlspecialchars("Rechazado") ?>
                                         <?php else: ?>
                                             <?= htmlspecialchars("Desconocido") ?>
@@ -87,21 +87,21 @@ endif;
                                     <td>
                                         <?php if ($s->aceptado == 'P'): ?>
                                             <button type="button" class="btn btn-success accept-btn" data-id="<?= $s->id_solicitud ?>"
-                                                <?= $s->aceptado === 'a' ? 'disabled' : '' ?>>
+                                                <?= $s->aceptado === 'A' ? 'disabled' : '' ?>>
                                                 Aceptar
                                             </button>
                                             <button type="button" class="btn btn-danger reject-btn" data-id="<?= $s->id_solicitud ?>"
-                                                <?= $s->aceptado === 'r' ? 'disabled' : '' ?>>
+                                                <?= $s->aceptado === 'R' ? 'disabled' : '' ?>>
                                                 Rechazar
                                             </button>
-                                        <?php elseif ($s->aceptado == 'a'): ?>
+                                        <?php elseif ($s->aceptado == 'A'): ?>
                                             <button type="button" class="btn btn-danger reject-btn" data-id="<?= $s->id_solicitud ?>"
-                                                <?= $s->aceptado === 'r' ? 'disabled' : '' ?>>
+                                                <?= $s->aceptado === 'R' ? 'disabled' : '' ?>>
                                                 Rechazar
                                             </button>
-                                        <?php elseif ($s->aceptado == 'r'): ?>
+                                        <?php elseif ($s->aceptado == 'R'): ?>
                                             <button type="button" class="btn btn-success accept-btn" data-id="<?= $s->id_solicitud ?>"
-                                                <?= $s->aceptado === 'a' ? 'disabled' : '' ?>>
+                                                <?= $s->aceptado === 'A' ? 'disabled' : '' ?>>
                                                 Aceptar
                                             </button>
                                         <?php endif; ?>
@@ -113,9 +113,9 @@ endif;
                                     <td class="status-cell">
                                         <?php if ($s->aceptado == 'P'): ?>
                                             <?= htmlspecialchars("Pendiente") ?>
-                                        <?php elseif ($s->aceptado == 'a'): ?>
+                                        <?php elseif ($s->aceptado == 'A'): ?>
                                             <?= htmlspecialchars("Aceptado") ?>
-                                        <?php elseif ($s->aceptado == 'r'): ?>
+                                        <?php elseif ($s->aceptado == 'R'): ?>
                                             <?= htmlspecialchars("Rechazado") ?>
                                         <?php else: ?>
                                             <?= htmlspecialchars("Desconocido") ?>
@@ -174,9 +174,9 @@ endif;
                         if (data.success) {
                             const row = button.closest('tr');
                             const statusCell = row.querySelector('.status-cell');
-                            statusCell.textContent = aceptado === 'a' ? 'Aceptado' : 'Rechazado';
-                            row.querySelector('.accept-btn').disabled = aceptado === 'a';
-                            row.querySelector('.reject-btn').disabled = aceptado === 'r';
+                            statusCell.textContent = aceptado === 'A' ? 'Aceptado' : 'Rechazado';
+                            row.querySelector('.accept-btn').disabled = aceptado === 'A';
+                            row.querySelector('.reject-btn').disabled = aceptado === 'R';
                             window.location.reload();  
                         }
                     })
@@ -189,11 +189,11 @@ endif;
             }
 
             acceptButtons.forEach(button => {
-                button.addEventListener('click', () => handleButtonClick(button, 'a'));
+                button.addEventListener('click', () => handleButtonClick(button, 'A'));
             });
 
             rejectButtons.forEach(button => {
-                button.addEventListener('click', () => handleButtonClick(button, 'r'));
+                button.addEventListener('click', () => handleButtonClick(button, 'R'));
             });
         });
     </script>
