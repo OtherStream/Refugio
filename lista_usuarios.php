@@ -82,11 +82,7 @@ $usuarios = $dao->obtenerTodos();
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.response);
-                    if (data.){
-                        document.querySelector(`tr:has(button[data-id="${currentId}"])`).remove();
-                        window.location.reload();
-                    }
+                    window.location.reload();  
                 })
                 .catch(error => {
                     console.error('Error:', error);
