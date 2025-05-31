@@ -173,9 +173,11 @@ class DAOAnimalAdopcion
     public function eliminar($id)
     {
         try {
+            
             $this->conectar();
             $sentenciaSQL = $this->conexion->prepare("DELETE FROM enadopcion WHERE id_dar = ?");
-            return $sentenciaSQL->execute([$id]);
+            $sentenciaSQL->execute([$id]);
+            return true; 
         } catch (PDOException $e) {
             return false;
         } finally {
@@ -196,14 +198,14 @@ class DAOAnimalAdopcion
                 $obj->nombre,
                 $obj->descripcion,
                 $obj->imagen,
-                $obj->tipo,
+                $obj->tipo_animal,
                 $obj->tamano,
                 $obj->color,
                 $obj->genero,
-                $obj->id
+                $obj->id_dar
             ]);
             $affectedRows = $sentenciaSQL->rowCount();
-            error_log("DAOAnimalAdopcion::editar: Affected rows = $affectedRows for id_dar = " . $obj->id);
+            error_log("DAOAnimalAdopcion::editar: Affected rows = $affectedRows for id_dar = " . $obj->id_dar);
             return $affectedRows > 0;
         } catch (PDOException $e) {
             error_log("DAOAnimalAdopcion::editar: Error - " . $e->getMessage());
