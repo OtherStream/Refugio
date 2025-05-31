@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     if ($id !== false && $id > 0) {
         $dao = new DAOAnimalAdopcion();
         $resultado = $dao->eliminar($id);
-
+        
         if ($resultado) {
             echo json_encode(['success' => true, 'mensaje' => 'Animal eliminado correctamente']);
         } else {
