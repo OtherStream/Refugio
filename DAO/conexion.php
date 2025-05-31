@@ -3,7 +3,7 @@ class Conexion
 {
     
     private static $servidor = 'localhost' ;
-    private static $db = 'Refugio1' ;
+    private static $db = 'refugio' ;
     private static $usuario = 'postgres';
     private static $password = 'root';
     private static $puerto = '5432';
