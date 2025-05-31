@@ -68,8 +68,8 @@
             <label for="tipo" class="form-label">Tipo:</label>
             <select class="form-select" id="tipo" name="tipo">
                 <option value="" disabled <?= !$animal && !isset($_SESSION['form_data']['tipo']) ? 'selected' : '' ?>>Selecciona un tipo</option>
-                <option value="perro" <?= ($animal && $animal->tipo === 'perro') || (isset($_SESSION['form_data']['tipo']) && $_SESSION['form_data']['tipo'] === 'perro') ? 'selected' : '' ?>>Perro</option>
-                <option value="gato" <?= ($animal && $animal->tipo === 'gato') || (isset($_SESSION['form_data']['tipo']) && $_SESSION['form_data']['tipo'] === 'gato') ? 'selected' : '' ?>>Gato</option>
+                <option value="Perro" <?= ($animal && $animal->tipo_animal === 'Perro') || (isset($_SESSION['form_data']['tipo']) && $_SESSION['form_data']['tipo'] === 'Perro') ? 'selected' : '' ?>>Perro</option>
+                <option value="Gato" <?= ($animal && $animal->tipo_animal === 'Gato') || (isset($_SESSION['form_data']['tipo']) && $_SESSION['form_data']['tipo'] === 'Gato') ? 'selected' : '' ?>>Gato</option>
             </select>
             <span id="errorTipo" class="text-danger"></span>
         </div>
