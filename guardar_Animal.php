@@ -9,7 +9,7 @@ $errores = [];
 
 $animal->nombre = $_POST['nombre'] ?? '';
 $animal->descripcion = $_POST['descripcion'] ?? '';
-$animal->tipo = $_POST['tipo'] ?? '';
+$animal->tipo_animal = $_POST['tipo'] ?? '';
 $animal->tamano = $_POST['tamano'] ?? '';
 $animal->color = $_POST['color'] ?? '';
 $animal->genero = $_POST['genero'] ?? '';
@@ -29,9 +29,10 @@ if (!$isEdit && (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPL
     $errores[] = "Debes seleccionar una imagen.";
 }
 
-if (!in_array($animal->tipo, ['perro', 'gato'])) {
+if (!in_array(trim($animal->tipo_animal), ['Perro', 'Gato'])) {
     $errores[] = "Debes seleccionar un tipo válido.";
 }
+
 
 if (!in_array($animal->tamano, ['pequeño', 'mediano', 'grande'])) {
     $errores[] = "Debes seleccionar un tamaño válido.";
@@ -68,7 +69,7 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
 if (!empty($errores)) {
     $_SESSION['errores'] = $errores;
     $_SESSION['form_data'] = $_POST;
-    header("Location: formularios/f_animal.php" . ($isEdit ? "?id=" . $animal->id : ""));
+    header("Location: formularios/f-adopcion.php" . ($isEdit ? "?id=" . $animal->id_dar: ""));
     exit();
 }
 
